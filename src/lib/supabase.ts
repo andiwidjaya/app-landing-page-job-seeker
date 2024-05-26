@@ -1,11 +1,14 @@
-import { supabaseClient } from "./supabaseClient";
+import { createClient } from "@supabase/supabase-js";
+
+export const supabaseClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!!,
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY!!
+);
 
 export const supabasePublicUrl = async (filename: string, bucket: string) => {
   const {
     data: { publicUrl },
-  } = await supabaseClient.storage
-    .from(bucket)
-    .getPublicUrl(`public/${filename}`);
+  } = supabaseClient.storage.from(bucket).getPublicUrl(`public/${filename}`);
 
   return publicUrl;
 };
